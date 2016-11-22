@@ -10,12 +10,6 @@ fi
 
 echo "DEPS dir $DEPS"
 
-if [ "${MODULE}" = 'all' ]; then
-  echo ""
-  echo "To start a single module use:\n $0 DeviceManager|ProtocolManager|BLE|http"
-  echo ""
-fi
-
 TOEXPORT=""
 
 if [ ! -z "$DISPLAY" ]; then
@@ -68,26 +62,8 @@ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$DEPS:$DEPS/lib:/usr/lib:/usr/lib/jvm/jd
 
 mvn="mvn"
 
-if [ $MODULE = 'all' ] || [ $MODULE = 'ProtocolManager' ]; then
-  ./scripts/stop.sh "ProtocolManager"
-  java -jar -Djava.library.path=deps iot.agile.ProtocolManager/target/protocol-manager-1.0-jar-with-dependencies.jar &
-  echo "Started AGILE Protocol Manager"
-fi
-
-if [ $MODULE = 'all' ] || [ $MODULE = 'DeviceManager' ]; then
-  ./scripts/stop.sh "DeviceManager"
-  java -jar -Djava.library.path=deps iot.agile.DeviceManager/target/device-manager-1.0-jar-with-dependencies.jar &
-  echo "Started AGILE Device Manager"
-fi
-
-if [ $MODULE = 'all' ] || [ $MODULE = 'http' ]; then
-  ./scripts/stop.sh "http"
-  java -jar -Djava.library.path=deps iot.agile.http/target/http-1.0-jar-with-dependencies.jar &
-  echo "Started AGILE HTTP API"
-fi
-
 if [ $MODULE = 'all' ] || [ $MODULE = 'BLE' ]; then
-  ./scripts/stop.sh "protocol.BLE"
+#  ./scripts/stop.sh "protocol.BLE"
   # wait for Bluez to initialize
   while `! qdbus --system org.bluez > /dev/null`; do
     echo "waiting for Bluez to initialize";
@@ -99,7 +75,6 @@ if [ $MODULE = 'all' ] || [ $MODULE = 'BLE' ]; then
 #    echo "waiting for ProtocolManager to initialize";
 #    sleep 1;
 #  done
-
 
   java -cp deps/tinyb.jar:iot.agile.protocol.BLE/target/ble-1.0-jar-with-dependencies.jar -Djava.library.path=deps:deps/lib iot.agile.protocol.ble.BLEProtocolImp &
   echo "Started AGILE BLE protocol"
