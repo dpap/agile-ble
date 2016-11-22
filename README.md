@@ -3,7 +3,7 @@ Agile Bluetooth Low Energy components
 ===
 
 This repository contains the alpha version of Agile Bluetooth Low Energy protocol implementation:
----
+
 
 Exposes the [iot.agile.Protocol](http://agile-iot.github.io/agile-api-spec/docs/html/api.html#iot_agile_Protocol) interface
 
