@@ -8,7 +8,6 @@ if [ ! -e "$DEPS" ]; then
   ./scripts/install-deps.sh
 fi
 
-echo "DEPS dir $DEPS"
 
 TOEXPORT=""
 
@@ -63,7 +62,7 @@ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$DEPS:$DEPS/lib:/usr/lib:/usr/lib/jvm/jd
 mvn="mvn"
 
 if [ $MODULE = 'all' ] || [ $MODULE = 'BLE' ]; then
-#  ./scripts/stop.sh "protocol.BLE"
+  ./scripts/stop.sh "protocol.BLE"
   # wait for Bluez to initialize
   while `! qdbus --system org.bluez > /dev/null`; do
     echo "waiting for Bluez to initialize";
@@ -71,10 +70,10 @@ if [ $MODULE = 'all' ] || [ $MODULE = 'BLE' ]; then
   done
 
   # wait for ProtocolManager to initialize
-#  while `! qdbus iot.agile.ProtocolManager > /dev/null`; do
-#    echo "waiting for ProtocolManager to initialize";
-#    sleep 1;
-#  done
+  while `! qdbus iot.agile.ProtocolManager > /dev/null`; do
+    echo "waiting for ProtocolManager to initialize";
+    sleep 1;
+  done
 
   java -cp deps/tinyb.jar:iot.agile.protocol.BLE/target/ble-1.0-jar-with-dependencies.jar -Djava.library.path=deps:deps/lib iot.agile.protocol.ble.BLEProtocolImp &
   echo "Started AGILE BLE protocol"

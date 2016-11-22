@@ -16,5 +16,8 @@ cd $CURRDIR
 sh ./scripts/install-dbus-java.sh $DEPS
 sh ./scripts/install-tinyb.sh $DEPS
 
+cd iot.agile.protocol.BLE
 
 mvn clean install -U
+
+cd ..
