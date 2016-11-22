@@ -80,7 +80,7 @@ if [ $MODULE = 'all' ] || [ $MODULE = 'BLE' ]; then
 fi
 
 
-echo "Modules launched use this variables in the shell:"
+echo "Module launched use this variables in the shell:"
 echo $TOEXPORT
 echo ""
 
