@@ -118,7 +118,7 @@ RUN wget http://www.kernel.org/pub/linux/bluetooth/bluez-5.39.tar.xz \
 # copy directories into WORKDIR
 COPY iot.agile.protocol.BLE iot.agile.protocol.BLE
 
-RUN mvn package
+RUN mvn package -f iot.agile.protocol.BLE/pom.xml
 
 CMD [ "bash", "/usr/src/app/scripts/start.sh" ]
 
