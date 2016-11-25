@@ -116,14 +116,7 @@ RUN wget http://www.kernel.org/pub/linux/bluetooth/bluez-5.39.tar.xz \
     && cd .. && rm -rf bluez-5.39
 
 # copy directories into WORKDIR
-COPY agile-interfaces agile-interfaces
-COPY agile-main agile-main
-COPY iot.agile.DeviceManager iot.agile.DeviceManager
-COPY iot.agile.ProtocolManager iot.agile.ProtocolManager
-COPY iot.agile.http iot.agile.http
 COPY iot.agile.protocol.BLE iot.agile.protocol.BLE
-COPY test test
-COPY pom.xml pom.xml
 
 RUN mvn package
 

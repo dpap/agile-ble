@@ -116,14 +116,7 @@ RUN wget http://www.kernel.org/pub/linux/bluetooth/bluez-5.39.tar.xz \
     && sudo make install
 
 # copy directories into WORKDIR
-COPY agile-interfaces agile-interfaces
-COPY agile-main agile-main
-COPY iot.agile.DeviceManager iot.agile.DeviceManager
-COPY iot.agile.ProtocolManager iot.agile.ProtocolManager
-COPY iot.agile.http iot.agile.http
 COPY iot.agile.protocol.BLE iot.agile.protocol.BLE
-COPY test test
-COPY pom.xml pom.xml
 
 RUN mvn package
 
@@ -132,9 +125,6 @@ CMD [ "bash", "/usr/src/app/scripts/start.sh" ]
 TAG agile-core-armv7l-builder
 
 #ADD rsync /opt/rsync/bin/rsync
-EXPORT iot.agile.ProtocolManager/target/protocol-manager-1.0-jar-with-dependencies.jar
-EXPORT iot.agile.DeviceManager/target/device-manager-1.0-jar-with-dependencies.jar
-EXPORT iot.agile.http/target/http-1.0-jar-with-dependencies.jar
 EXPORT iot.agile.protocol.BLE/target/ble-1.0-jar-with-dependencies.jar
 EXPORT deps
 
@@ -183,10 +173,7 @@ ENV APATH /usr/src/app
 RUN apt-get update && apt-get install --no-install-recommends -y \
     qdbus
 COPY scripts scripts
-RUN mkdir -p iot.agile.ProtocolManager/target iot.agile.DeviceManager/target iot.agile.http/target iot.agile.protocol.BLE/target
-IMPORT protocol-manager-1.0-jar-with-dependencies.jar iot.agile.ProtocolManager/target/protocol-manager-1.0-jar-with-dependencies.jar
-IMPORT device-manager-1.0-jar-with-dependencies.jar iot.agile.DeviceManager/target/device-manager-1.0-jar-with-dependencies.jar
-IMPORT http-1.0-jar-with-dependencies.jar iot.agile.http/target/http-1.0-jar-with-dependencies.jar
+RUN mkdir -p iot.agile.protocol.BLE/target
 IMPORT ble-1.0-jar-with-dependencies.jar iot.agile.protocol.BLE/target/ble-1.0-jar-with-dependencies.jar
 IMPORT deps .
 RUN apt-get update && apt-get install --no-install-recommends -y \
