@@ -20,8 +20,8 @@ fi
 
 if [ ! -e "$BUILD/agile-interfaces" ] ; then
   cd $BUILD
-  git clone https://github.com/doitdagi/agile-api-spec-test.git
-   cd agile-api-spec-test/agile-dbus-java-interface
+  git clone https://github.com/Agile-IoT/agile-api-spec.git
+   cd agile-api-spec/agile-dbus-java-interface
    ./scripts/install-dependencies.sh
    mvn package
    cp target/agile-interfaces-1.0.jar $DEPS
