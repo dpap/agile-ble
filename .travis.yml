@@ -33,6 +33,8 @@ before_install:
     fi
 install:
       - CC=clang CXX=clang++ CMAKE_C_COMPILER=clang CMAKE_CXX_COMPILER=clang++ scripts/install-deps.sh
+script:
+  - cd iot.agile.protocol.BLE && mvn test
 after_success:
   - docker login -e="$DOCKER_EMAIL" -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
   - docker push $IMAGE:$TRAVIS_BRANCH;
