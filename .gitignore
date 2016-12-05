@@ -4,11 +4,11 @@ deps
 .classpath
 .project
 .log
-/api.http/target/
 .metadata/
 .recommenders
-/iot.agile.http/target/
 */*.log
 *.log
-/agile-main/target/
+nb*
+target
+/bin/
 /bluez-5.39/
