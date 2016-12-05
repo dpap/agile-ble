@@ -125,7 +125,7 @@ RUN mvn package -f iot.agile.protocol.BLE/pom.xml
 
 CMD [ "bash", "/usr/src/app/scripts/start.sh" ]
 
-TAG agile-core-armv7l-builder
+TAG agile-ble-armv7l-builder
 
 #ADD rsync /opt/rsync/bin/rsync
 EXPORT iot.agile.protocol.BLE/target/ble-1.0-jar-with-dependencies.jar
@@ -200,4 +200,4 @@ RUN cd bluez-5.39 \
     && sudo make install
 
 CMD [ "bash", "/usr/src/app/scripts/start.sh" ]
-TAG agile-core-armv7l
+TAG agile-ble-armv7l
