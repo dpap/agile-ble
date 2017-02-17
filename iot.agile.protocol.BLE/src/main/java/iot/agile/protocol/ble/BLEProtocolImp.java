@@ -379,9 +379,11 @@ public class BLEProtocolImp extends AbstractAgileObject implements Protocol {
 					BluetoothGattService gattService = device.find(profile.get(GATT_SERVICE));
 					if (gattService != null) {
 						BluetoothGattCharacteristic gattChar = gattService.find(profile.get(GATT_CHARACTERSTICS));
+						logger.info("BT Device Read: Service"+gattChar.getService().getUUID() + " Charstic: " + gattChar.getUUID());
 						if (gattChar != null) {
 						synchronized (gattChar) {
-							lastRecord = gattChar.readValue();
+							lastRecord = gattChar.readValue();							
+							logger.info("BT Device Data Value: " + byteArrayToHex(lastRecord));	
 						}
 						return lastRecord;
 						} else {
@@ -626,5 +628,12 @@ public class BLEProtocolImp extends AbstractAgileObject implements Protocol {
 		}
 		return true;
 	}
+
+	public static String byteArrayToHex(byte[] a) {
+	   StringBuilder sb = new StringBuilder(a.length * 2);
+	   for(byte b: a)
+	      sb.append(String.format("%02x", b));
+	   return sb.toString();
+}
 
 }
