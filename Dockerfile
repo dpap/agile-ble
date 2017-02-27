@@ -122,8 +122,6 @@ RUN wget http://www.kernel.org/pub/linux/bluetooth/bluez-5.43.tar.xz \
 # copy directories into WORKDIR
 COPY iot.agile.protocol.BLE iot.agile.protocol.BLE
 
-#RUN echo "We are getting errors"
-#RUN pwd
 RUN mvn package -f ./iot.agile.protocol.BLE/pom.xml
 
 CMD [ "bash", "/usr/src/app/scripts/start.sh" ]
