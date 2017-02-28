@@ -68,18 +68,18 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # isntall bluez
-RUN wget http://www.kernel.org/pub/linux/bluetooth/bluez-5.39.tar.xz \
-    && tar xf bluez-5.39.tar.xz \
-    && rm bluez-5.39.tar.xz \
-    && cd bluez-5.39 \
+RUN wget http://www.kernel.org/pub/linux/bluetooth/bluez-5.43.tar.xz \
+    && tar xf bluez-5.43.tar.xz \
+    && rm bluez-5.43.tar.xz \
+    && cd bluez-5.43 \
     && ./configure \
     && make -j 4 \
     && sudo make install \
-    && cd .. && rm -rf bluez-5.39
+    && cd .. && rm -rf bluez-5.43
 
 # copy directories into WORKDIR
 COPY iot.agile.protocol.BLE iot.agile.protocol.BLE
 
-RUN mvn package -f iot.agile.protocol.BLE/pom.xml
+RUN mvn package -f ./iot.agile.protocol.BLE/pom.xml 
 
 CMD [ "bash", "/usr/src/app/scripts/start.sh" ]

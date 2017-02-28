@@ -25,7 +25,10 @@ if [ ! -e "$BUILD/tinyb" ] ; then
   cd $BUILD
   git clone https://github.com/intel-iot-devkit/tinyb.git
   cd tinyb
-  git checkout "v$TINYB_VER"
+  #git checkout "v$TINYB_VER"
+#For bluez5.4+ a patch needs to be applied to 
+#handle "readValue()" api differences
+  git checkout 6e580f494
   cd ..
 fi
 
