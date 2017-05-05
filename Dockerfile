@@ -69,4 +69,20 @@ COPY iot.agile.protocol.BLE iot.agile.protocol.BLE
 
 RUN mvn package -f ./iot.agile.protocol.BLE/pom.xml 
 
+FROM resin/nuc-openjdk:openjdk-8-jdk
+WORKDIR /usr/src/app
+ENV APATH /usr/src/app
+
+# install services
+RUN echo "deb http://deb.debian.org/debian unstable main" >>/etc/apt/sources.list \
+    && apt-get update && apt-get install --no-install-recommends -y \
+    bluez/unstable \
+    dbus \
+    qdbus \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+COPY --from=0 $APATH/scripts scripts
+COPY --from=0 $APATH/iot.agile.protocol.BLE/target/ble-1.0-jar-with-dependencies.jar iot.agile.protocol.BLE/target/ble-1.0-jar-with-dependencies.jar
+COPY --from=0 $APATH/deps deps
+
 CMD [ "bash", "/usr/src/app/scripts/start.sh" ]
