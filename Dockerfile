@@ -1,4 +1,4 @@
-FROM resin/nuc-openjdk:openjdk-8-jdk
+FROM resin/raspberrypi3-openjdk:openjdk-8-jdk-20170217
 
 # Add packages
 RUN apt-get update && apt-get install --no-install-recommends -y \
@@ -69,7 +69,7 @@ COPY iot.agile.protocol.BLE iot.agile.protocol.BLE
 
 RUN mvn package -f ./iot.agile.protocol.BLE/pom.xml 
 
-FROM resin/nuc-openjdk:openjdk-8-jdk
+FROM resin/raspberrypi3-openjdk:openjdk-8-jdk-20170217
 WORKDIR /usr/src/app
 ENV APATH /usr/src/app
 
