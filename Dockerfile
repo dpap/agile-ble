@@ -1,4 +1,4 @@
-FROM resin/raspberrypi3-openjdk:openjdk-8-jdk-20170217
+FROM resin/nuc-openjdk:openjdk-8-jdk
 
 # Add packages
 RUN apt-get update && apt-get install --no-install-recommends -y \
@@ -58,24 +58,11 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
     libxrender1 \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# required by bluez
-RUN apt-get update && apt-get install --no-install-recommends -y \
-    libglib2.0-dev \
-    libdbus-1-dev \
-    libudev-dev \
-    libical-dev \
-    libreadline-dev \
-    && apt-get clean && rm -rf /var/lib/apt/lists/*
-
 # isntall bluez
-RUN wget http://www.kernel.org/pub/linux/bluetooth/bluez-5.43.tar.xz \
-    && tar xf bluez-5.43.tar.xz \
-    && rm bluez-5.43.tar.xz \
-    && cd bluez-5.43 \
-    && ./configure \
-    && make -j 4 \
-    && sudo make install \
-    && cd .. && rm -rf bluez-5.43
+RUN echo "deb http://deb.debian.org/debian unstable main" >>/etc/apt/sources.list \
+    && apt-get update && apt-get install --no-install-recommends -y \
+    bluez/unstable \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # copy directories into WORKDIR
 COPY iot.agile.protocol.BLE iot.agile.protocol.BLE
