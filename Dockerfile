@@ -96,4 +96,7 @@ COPY --from=0 $APATH/scripts scripts
 COPY --from=0 $APATH/iot.agile.protocol.BLE/target/ble-1.0-jar-with-dependencies.jar iot.agile.protocol.BLE/target/ble-1.0-jar-with-dependencies.jar
 COPY --from=0 $APATH/deps deps
 
+# workaround for external startup command. To be removed.
+RUN mkdir -p /usr/local/libexec/bluetooth/ && ln -s /usr/sbin/bluetoothd /usr/local/libexec/bluetooth/bluetoothd
+
 CMD [ "bash", "/usr/src/app/scripts/start.sh" ]
