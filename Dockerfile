@@ -69,28 +69,31 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
     libxrender1 \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# required by bluez
-RUN apt-get update && apt-get install --no-install-recommends -y \
-    libglib2.0-dev \
-    libdbus-1-dev \
-    libudev-dev \
-    libical-dev \
-    libreadline-dev \
-    && apt-get clean && rm -rf /var/lib/apt/lists/*
-
 # isntall bluez
-RUN wget http://www.kernel.org/pub/linux/bluetooth/bluez-5.43.tar.xz \
-    && tar xf bluez-5.43.tar.xz \
-    && rm bluez-5.43.tar.xz \
-    && cd bluez-5.43 \
-    && ./configure \
-    && make -j 4 \
-    && sudo make install \
-    && cd .. && rm -rf bluez-5.43
+RUN echo "deb http://deb.debian.org/debian unstable main" >>/etc/apt/sources.list \
+    && apt-get update && apt-get install --no-install-recommends -y \
+    bluez/unstable \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # copy directories into WORKDIR
 COPY iot.agile.protocol.BLE iot.agile.protocol.BLE
 
 RUN mvn package -f ./iot.agile.protocol.BLE/pom.xml 
+
+FROM resin/raspberrypi3-openjdk:openjdk-8-jdk-20170217
+WORKDIR /usr/src/app
+ENV APATH /usr/src/app
+
+# install services
+RUN echo "deb http://deb.debian.org/debian unstable main" >>/etc/apt/sources.list \
+    && apt-get update && apt-get install --no-install-recommends -y \
+    bluez/unstable \
+    dbus \
+    qdbus \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+COPY --from=0 $APATH/scripts scripts
+COPY --from=0 $APATH/iot.agile.protocol.BLE/target/ble-1.0-jar-with-dependencies.jar iot.agile.protocol.BLE/target/ble-1.0-jar-with-dependencies.jar
+COPY --from=0 $APATH/deps deps
 
 CMD [ "bash", "/usr/src/app/scripts/start.sh" ]
