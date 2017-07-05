@@ -9,7 +9,7 @@
 #     Create-Net / FBK - initial API and implementation
 #-------------------------------------------------------------------------------
 
-FROM resin/raspberry-pi3-openjdk:openjdk-8-jdk-20170426
+FROM agileiot/raspberry-pi3-zulujdk:8-jdk-maven
 
 # Add packages
 RUN apt-get update && apt-get install --no-install-recommends -y \
@@ -80,7 +80,7 @@ COPY iot.agile.protocol.BLE iot.agile.protocol.BLE
 
 RUN mvn package -f ./iot.agile.protocol.BLE/pom.xml 
 
-FROM resin/raspberry-pi3-openjdk:openjdk-8-jdk-20170426
+FROM agileiot/raspberry-pi3-zulujdk:8-jre
 WORKDIR /usr/src/app
 ENV APATH /usr/src/app
 
@@ -90,6 +90,9 @@ RUN echo "deb http://deb.debian.org/debian unstable main" >>/etc/apt/sources.lis
     bluez/unstable \
     dbus \
     qdbus \
+    libxrender1 \
+    libxext6 \
+    libxtst6 \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 COPY --from=0 $APATH/scripts scripts
