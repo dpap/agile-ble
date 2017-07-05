@@ -90,6 +90,9 @@ RUN echo "deb http://deb.debian.org/debian unstable main" >>/etc/apt/sources.lis
     bluez/unstable \
     dbus \
     qdbus \
+    libxrender1 \
+    libxext6 \
+    libxtst6 \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 COPY --from=0 $APATH/scripts scripts
