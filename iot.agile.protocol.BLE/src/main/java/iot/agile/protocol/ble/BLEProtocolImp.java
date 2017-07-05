@@ -334,6 +334,7 @@ public class BLEProtocolImp extends AbstractAgileObject implements Protocol {
 		bleManager.stopDiscovery();
 		if (future != null) {
 			future.cancel(true);
+			future = null;
 		}
 	}
 
