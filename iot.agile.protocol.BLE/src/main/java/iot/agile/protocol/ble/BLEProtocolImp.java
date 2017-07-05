@@ -285,6 +285,11 @@ public class BLEProtocolImp extends AbstractAgileObject implements Protocol {
 	 */
 	@Override
 	public void StartDiscovery() {
+		if (future != null) {
+			logger.info("Discovery already running");
+			return;
+		}
+
 		logger.info("Started discovery of BLE devices");
 
 		bleManager.startDiscovery();
@@ -331,6 +336,11 @@ public class BLEProtocolImp extends AbstractAgileObject implements Protocol {
 	 */
 	@Override
 	public void StopDiscovery() {
+		if (future == null) {
+			logger.info("Discovery not running");
+			return;
+		}
+
 		bleManager.stopDiscovery();
 		if (future != null) {
 			future.cancel(true);
