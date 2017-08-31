@@ -4,7 +4,7 @@
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     Create-Net / FBK - initial API and implementation
  ******************************************************************************/
@@ -35,6 +35,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
+import java.time.Duration;
 
 import org.freedesktop.dbus.exceptions.DBusException;
 import org.slf4j.Logger;
@@ -357,15 +358,34 @@ public class BLEProtocolImp extends AbstractAgileObject implements Protocol {
 	@Override
 	public void Write(String deviceAddress, Map<String, String> profile, byte[] payload) throws DBusException {
 			BluetoothDevice device;
+			logger.info("Write to char {} : {}", profile.get(GATT_CHARACTERSTICS),  byteArrayToHex(payload));
 			try {
 				device = (BluetoothDevice) bleManager.find(BluetoothType.DEVICE, null, deviceAddress, null);
+				logger.info("Write device {}", device.toString());
+				logger.info("Write getConnected1 {}", device.getConnected());
+				logger.info("device.find(null) {}", device.find(null));
+				logger.info("device.find(profile.get(GATT_SERVICE)) {}", device.find(profile.get(GATT_SERVICE), Duration.ofSeconds(10)));
 				if (device != null) {
 					if (device.getConnected()) {
-						BluetoothGattService gattService = device.find(profile.get(GATT_SERVICE));
+						logger.info("Services {}", device.getServices());
+						for (BluetoothGattService service : device.getServices()){
+							logger.info("Service {}", service.getUUID());
+						}
+						//logger.info("Write getConnected {} {}", device.find(null) , device.find(profile.get(GATT_SERVICE)));
+
+						BluetoothGattService gattService = device.find(profile.get(GATT_SERVICE) , Duration.ofSeconds(10));
+						//BluetoothGattService gattService = device.find(null);
+						logger.info("Write service {}" , gattService.toString());
 						if (gattService != null) {
-							BluetoothGattCharacteristic gattChar = gattService.find(profile.get(GATT_CHARACTERSTICS));
+							//logger.info("Write char {} {} " + gattService.find(null) , gattService.find(profile.get(GATT_CHARACTERSTICS)));
+							logger.info("Write char {} " , gattService.find(null) );
+							logger.info("Write char {} " , gattService.find(profile.get(GATT_CHARACTERSTICS)) );
+							BluetoothGattCharacteristic gattChar = gattService.find(profile.get(GATT_CHARACTERSTICS), Duration.ofSeconds(10));
+							//BluetoothGattCharacteristic gattChar = gattService.find(null);
+							logger.info("Write char {}" , gattChar.toString());
 							if (gattChar != null) {
 								synchronized (gattChar) {
+								logger.info("Writing data {}", byteArrayToHex(payload));
 								gattChar.writeValue(payload);
 							}
 						} else {
@@ -397,9 +417,9 @@ public class BLEProtocolImp extends AbstractAgileObject implements Protocol {
 			device = (BluetoothDevice) bleManager.find(BluetoothType.DEVICE, null, deviceAddress, null);
 			if (device != null) {
 				if (device.getConnected()) {
-					BluetoothGattService gattService = device.find(profile.get(GATT_SERVICE));
+					BluetoothGattService gattService = device.find(profile.get(GATT_SERVICE) , Duration.ofSeconds(10));
 					if (gattService != null) {
-						BluetoothGattCharacteristic gattChar = gattService.find(profile.get(GATT_CHARACTERSTICS));
+						BluetoothGattCharacteristic gattChar = gattService.find(profile.get(GATT_CHARACTERSTICS), Duration.ofSeconds(10));
 						if (gattChar != null) {
 						synchronized (gattChar) {
 							lastRecord = gattChar.readValue();
@@ -437,18 +457,23 @@ public class BLEProtocolImp extends AbstractAgileObject implements Protocol {
 		BluetoothDevice device;
 		try {
 			device = (BluetoothDevice) bleManager.find(BluetoothType.DEVICE, null, deviceAddress, null);
+			logger.info("NotificationRead:device: "+ device.toString());
+			logger.info("NotificationRead:connection: " + device.getConnected());
 			if (device != null) {
 				if (device.getConnected()) {
-					BluetoothGattService gattService = device.find(profile.get(GATT_SERVICE));
+					logger.info("NotificationRead:Service " + profile.get(GATT_SERVICE));
+					BluetoothGattService gattService = device.find(profile.get(GATT_SERVICE), Duration.ofSeconds(10));
+					logger.info("NotificationRead:Service " + profile.get(GATT_SERVICE));
 					if (gattService != null) {
-						BluetoothGattCharacteristic gattChar = gattService.find(profile.get(GATT_CHARACTERSTICS));
+						BluetoothGattCharacteristic gattChar = gattService.find(profile.get(GATT_CHARACTERSTICS), Duration.ofSeconds(10));
+						logger.info("NotificationRead: " + profile.get(GATT_CHARACTERSTICS));
 						synchronized (gattChar) {
 							if (gattChar != null) {
 								if (!gattChar.getNotifying()) {
 									gattChar.enableValueNotifications(new BluetoothNotification<byte[]>() {
 										@Override
 										public void run(byte[] data) {
-											result[0] = data;
+											logger.info("data:" + byteArrayToHex(data) );
 											latch.countDown();
 										}
 									});
@@ -526,8 +551,8 @@ public class BLEProtocolImp extends AbstractAgileObject implements Protocol {
 			throw new DBusException("Failed to subscribe");
 		}
 	}
-	
-	
+
+
 	@Override
 	public void Unsubscribe(String deviceAddress, Map<String, String> profile) throws DBusException {
 		BluetoothDevice device;
@@ -542,7 +567,7 @@ public class BLEProtocolImp extends AbstractAgileObject implements Protocol {
 						BluetoothGattCharacteristic gattChar = subscriptions.remove(new AddressProfile(deviceAddress, profile));
 						if (gattChar != null) {
 							if(gattChar.getNotifying()){
-								logger.info("disabled");
+								logger.info("disabled Notifications");
 								gattChar.disableValueNotifications();
 							}
 						} else {
@@ -586,6 +611,7 @@ public class BLEProtocolImp extends AbstractAgileObject implements Protocol {
 				Protocol.NewRecordSignal newRecordSignal = new Protocol.NewRecordSignal(AGILE_NEW_RECORD_SIGNAL_PATH,
 						lastRecord, address, profile);
 				logger.debug("Notifying {}", this);
+				logger.info("data:" + byteArrayToHex(record) );
 				connection.sendSignal(newRecordSignal);
 			} catch (DBusException e) {
 				e.printStackTrace();
@@ -648,4 +674,10 @@ public class BLEProtocolImp extends AbstractAgileObject implements Protocol {
 		return true;
 	}
 
+	private String byteArrayToHex(byte[] a) {
+		 StringBuilder sb = new StringBuilder(a.length * 2);
+		 for(byte b: a)
+			sb.append(String.format("%02x", b));
+		 return sb.toString();
+	}
 }
