@@ -526,9 +526,9 @@ public class BLEProtocolImp extends AbstractAgileObject implements Protocol {
 			device = (BluetoothDevice) bleManager.find(BluetoothType.DEVICE, null, deviceAddress, null);
 			if (device != null) {
 				if (device.getConnected()) {
-					BluetoothGattService gattService = device.find(profile.get(GATT_SERVICE));
+					BluetoothGattService gattService = device.find(profile.get(GATT_SERVICE), Duration.ofSeconds(10));
 					if (gattService != null) {
-						BluetoothGattCharacteristic gattChar = gattService.find(profile.get(GATT_CHARACTERSTICS));
+						BluetoothGattCharacteristic gattChar = gattService.find(profile.get(GATT_CHARACTERSTICS) , Duration.ofSeconds(10));
 						if (gattChar != null) {
 							if(!gattChar.getNotifying()){
 								gattChar.enableValueNotifications(new NewRecordNotification(deviceAddress,profile));
@@ -561,7 +561,7 @@ public class BLEProtocolImp extends AbstractAgileObject implements Protocol {
 			device = (BluetoothDevice) bleManager.find(BluetoothType.DEVICE, null, deviceAddress, null);
 			if (device != null) {
 				if (device.getConnected()) {
-					BluetoothGattService gattService = device.find(profile.get(GATT_SERVICE));
+					BluetoothGattService gattService = device.find(profile.get(GATT_SERVICE), Duration.ofSeconds(10));
 					if (gattService != null) {
 						//BluetoothGattCharacteristic gattChar = gattService.find(profile.get(GATT_CHARACTERSTICS));
 						BluetoothGattCharacteristic gattChar = subscriptions.remove(new AddressProfile(deviceAddress, profile));
