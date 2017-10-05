@@ -9,7 +9,10 @@
 #     Create-Net / FBK - initial API and implementation
 #-------------------------------------------------------------------------------
 
-FROM agileiot/raspberry-pi3-zulujdk:8-jdk-maven
+ARG BASEIMAGE_BUILD=agileiot/raspberry-pi3-zulujdk:8-jdk-maven
+ARG BASEIMAGE_DEPLOY=agileiot/raspberry-pi3-zulujdk:8-jre
+
+FROM $BASEIMAGE_BUILD
 
 # Add packages
 RUN apt-get update && apt-get install --no-install-recommends -y \
@@ -80,7 +83,7 @@ COPY iot.agile.protocol.BLE iot.agile.protocol.BLE
 
 RUN mvn package -f ./iot.agile.protocol.BLE/pom.xml 
 
-FROM agileiot/raspberry-pi3-zulujdk:8-jre
+FROM $BASEIMAGE_DEPLOY
 WORKDIR /usr/src/app
 ENV APATH /usr/src/app
 
