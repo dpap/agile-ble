@@ -4,6 +4,11 @@
 # are made available under the terms of the Eclipse Public License v1.0
 # which accompanies this distribution, and is available at
 # http://www.eclipse.org/legal/epl-v10.html
+
+## v0.1.7 - 2017-10-05
+
+* Use args in Dockerfile for baseimage override [Csaba Kiraly]
+
 # 
 # Contributors:
 #     Create-Net / FBK - initial API and implementation
