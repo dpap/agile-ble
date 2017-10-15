@@ -5,6 +5,10 @@
 # which accompanies this distribution, and is available at
 # http://www.eclipse.org/legal/epl-v10.html
 
+## v0.1.8 - 2017-10-15
+
+* Use dbus-java 2.10 [Csaba Kiraly]
+
 ## v0.1.7 - 2017-10-05
 
 * Use args in Dockerfile for baseimage override [Csaba Kiraly]
