@@ -2,9 +2,9 @@
 #-------------------------------------------------------------------------------
 # Copyright (C) 2017 Create-Net / FBK.
 # All rights reserved. This program and the accompanying materials
-# are made available under the terms of the Eclipse Public License v1.0
+# are made available under the terms of the Eclipse Public License 2.0
 # which accompanies this distribution, and is available at
-# http://www.eclipse.org/legal/epl-v10.html
+# https://www.eclipse.org/legal/epl-2.0/
 # 
 # Contributors:
 #     Create-Net / FBK - initial API and implementation
@@ -80,12 +80,12 @@ if [ $MODULE = 'all' ] || [ $MODULE = 'BLE' ]; then
   done
 
   # wait for ProtocolManager to initialize
-  while `! qdbus iot.agile.ProtocolManager > /dev/null`; do
+  while `! qdbus org.eclipse.agail.ProtocolManager > /dev/null`; do
     echo "waiting for ProtocolManager to initialize";
     sleep 1;
   done
 
-  java -cp deps/tinyb.jar:iot.agile.protocol.BLE/target/ble-1.0-jar-with-dependencies.jar -Djava.library.path=deps:deps/lib iot.agile.protocol.ble.BLEProtocolImp &
+  java -cp deps/tinyb.jar:org.eclipse.agail.protocol.BLE/target/ble-1.0-jar-with-dependencies.jar -Djava.library.path=deps:deps/lib org.eclipse.agail.protocol.ble.BLEProtocolImp &
   echo "Started AGILE BLE protocol"
 fi
 

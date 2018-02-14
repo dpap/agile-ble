@@ -2,9 +2,9 @@
 #-------------------------------------------------------------------------------
 # Copyright (C) 2017 Create-Net / FBK.
 # All rights reserved. This program and the accompanying materials
-# are made available under the terms of the Eclipse Public License v1.0
+# are made available under the terms of the Eclipse Public License 2.0
 # which accompanies this distribution, and is available at
-# http://www.eclipse.org/legal/epl-v10.html
+# https://www.eclipse.org/legal/epl-2.0/
 # 
 # Contributors:
 #     Create-Net / FBK - initial API and implementation
@@ -31,7 +31,7 @@ sh ./scripts/install-agile-interfaces.sh $DEPS
 sh ./scripts/install-tinyb.sh $DEPS
 
 # Enter into the project and compile 
-cd iot.agile.protocol.BLE
+cd org.eclipse.agail.protocol.BLE
 
 mvn clean install -U
 

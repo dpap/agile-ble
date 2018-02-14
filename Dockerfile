@@ -1,9 +1,9 @@
 #-------------------------------------------------------------------------------
 # Copyright (C) 2017 Create-Net / FBK.
 # All rights reserved. This program and the accompanying materials
-# are made available under the terms of the Eclipse Public License v1.0
+# are made available under the terms of the Eclipse Public License 2.0
 # which accompanies this distribution, and is available at
-# http://www.eclipse.org/legal/epl-v10.html
+# https://www.eclipse.org/legal/epl-2.0/
 # 
 # Contributors:
 #     Create-Net / FBK - initial API and implementation
@@ -79,9 +79,9 @@ RUN echo "deb http://deb.debian.org/debian unstable main" >>/etc/apt/sources.lis
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # copy directories into WORKDIR
-COPY iot.agile.protocol.BLE iot.agile.protocol.BLE
+COPY org.eclipse.agail.protocol.BLE org.eclipse.agail.protocol.BLE
 
-RUN mvn package -f ./iot.agile.protocol.BLE/pom.xml 
+RUN mvn package -f ./org.eclipse.agail.protocol.BLE/pom.xml 
 
 FROM $BASEIMAGE_DEPLOY
 WORKDIR /usr/src/app
@@ -99,7 +99,7 @@ RUN echo "deb http://deb.debian.org/debian unstable main" >>/etc/apt/sources.lis
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 COPY --from=0 $APATH/scripts scripts
-COPY --from=0 $APATH/iot.agile.protocol.BLE/target/ble-1.0-jar-with-dependencies.jar iot.agile.protocol.BLE/target/ble-1.0-jar-with-dependencies.jar
+COPY --from=0 $APATH/org.eclipse.agail.protocol.BLE/target/ble-1.0-jar-with-dependencies.jar org.eclipse.agail.protocol.BLE/target/ble-1.0-jar-with-dependencies.jar
 COPY --from=0 $APATH/deps deps
 
 # workaround for external startup command. To be removed.

@@ -1,9 +1,9 @@
 /*******************************************************************************
  * Copyright (C) 2017 Create-Net / FBK.
  * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
+ * are made available under the terms of the Eclipse Public License 2.0
  * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * https://www.eclipse.org/legal/epl-2.0/
  * 
  * Contributors:
  *     Create-Net / FBK - initial API and implementation
@@ -23,7 +23,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package iot.agile.protocol.ble;
+package org.eclipse.agail.protocol.ble;
 
 import java.util.Vector;
 import java.util.ArrayList;
@@ -40,12 +40,12 @@ import org.freedesktop.dbus.exceptions.DBusException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import iot.agile.Protocol;
-import iot.agile.ProtocolManager;
-import iot.agile.object.AbstractAgileObject;
-import iot.agile.object.DeviceOverview;
-import iot.agile.object.DeviceStatusType;
-import iot.agile.object.StatusType;
+import org.eclipse.agail.Protocol;
+import org.eclipse.agail.ProtocolManager;
+import org.eclipse.agail.object.AbstractAgileObject;
+import org.eclipse.agail.object.DeviceOverview;
+import org.eclipse.agail.object.DeviceStatusType;
+import org.eclipse.agail.object.StatusType;
 import tinyb.BluetoothDevice;
 import tinyb.BluetoothException;
 import tinyb.BluetoothGattCharacteristic;
@@ -67,22 +67,22 @@ public class BLEProtocolImp extends AbstractAgileObject implements Protocol {
 	/**
 	 * Bus name for AGILE BLE Protocol
 	 */
-	private static final String AGILE_BLUETOOTH_BUS_NAME = "iot.agile.protocol.BLE";
+	private static final String AGILE_BLUETOOTH_BUS_NAME = "org.eclipse.agail.protocol.BLE";
 
 	/**
 	 * Bus path for AGILE BLE Protocol
 	 */
-	private static final String AGILE_BLUETOOTH_BUS_PATH = "/iot/agile/protocol/BLE";
+	private static final String AGILE_BLUETOOTH_BUS_PATH = "/org/eclipse/agail/protocol/BLE";
 
 	/**
 	 * DBus bus path for found new device signal
 	 */
-	private static final String AGILE_NEW_DEVICE_SIGNAL_PATH = "/iot/agile/NewDevice";
+	private static final String AGILE_NEW_DEVICE_SIGNAL_PATH = "/org/eclipse/agail/NewDevice";
 
 	/**
 	 * DBus bus path for for new record/data reading
 	 */
-	private static final String AGILE_NEW_RECORD_SIGNAL_PATH = "/iot/agile/NewRecord";
+	private static final String AGILE_NEW_RECORD_SIGNAL_PATH = "/org/eclipse/agail/NewRecord";
 
 	/**
 	 * Protocol name
@@ -166,7 +166,7 @@ public class BLEProtocolImp extends AbstractAgileObject implements Protocol {
 	/**
 	 *
 	 *
-	 * @see iot.agile.protocol.ble.Protocol#name()
+	 * @see org.eclipse.agail.protocol.ble.Protocol#name()
 	 */
 	@Override
 	public String Name() {
@@ -175,7 +175,7 @@ public class BLEProtocolImp extends AbstractAgileObject implements Protocol {
 
 	/**
 	 *
-	 * @see iot.agile.protocol.ble.Protocol#driver()
+	 * @see org.eclipse.agail.protocol.ble.Protocol#driver()
 	 */
 	@Override
 	public String Driver() {
@@ -185,7 +185,7 @@ public class BLEProtocolImp extends AbstractAgileObject implements Protocol {
 	/**
 	 *
 	 *
-	 * @see iot.agile.protocol.ble.Protocol#Status()
+	 * @see org.eclipse.agail.protocol.ble.Protocol#Status()
 	 */
 	@Override
 	public String Status() {
@@ -202,7 +202,7 @@ public class BLEProtocolImp extends AbstractAgileObject implements Protocol {
 	}
 
 	/**
-	 * @see iot.agile.protocol.ble.Protocol#DataStore()
+	 * @see org.eclipse.agail.protocol.ble.Protocol#DataStore()
 	 */
 	@Override
 	public byte[] Data() {
@@ -214,7 +214,7 @@ public class BLEProtocolImp extends AbstractAgileObject implements Protocol {
 	 *
 	 * @param deviceAddress
 	 * @throws DBusException
-	 * @see iot.agile.protocol.ble.Protocol#initialize(java.lang.String)
+	 * @see org.eclipse.agail.protocol.ble.Protocol#initialize(java.lang.String)
 	 */
 	@Override
 	public void Connect(String deviceAddress) throws DBusException {
@@ -244,7 +244,7 @@ public class BLEProtocolImp extends AbstractAgileObject implements Protocol {
 	 *
 	 * @return
 	 * @throws DBusException
-	 * @see iot.agile.protocol.ble.Protocol#destory(java.lang.String)
+	 * @see org.eclipse.agail.protocol.ble.Protocol#destory(java.lang.String)
 	 */
 	@Override
 	public void Disconnect(String deviceAddress) throws DBusException {
@@ -266,7 +266,7 @@ public class BLEProtocolImp extends AbstractAgileObject implements Protocol {
 	/**
 	 * Discover status
 	 *
-	 * @see iot.agile.protocol.ble.Protocol#StopDiscovery()
+	 * @see org.eclipse.agail.protocol.ble.Protocol#StopDiscovery()
 	 */
 	@Override
 	public String DiscoveryStatus() {
@@ -332,7 +332,7 @@ public class BLEProtocolImp extends AbstractAgileObject implements Protocol {
 	/**
 	 * (non-Javadoc)
 	 *
-	 * @see iot.agile.protocol.ble.Protocol#StopDiscovery()
+	 * @see org.eclipse.agail.protocol.ble.Protocol#StopDiscovery()
 	 */
 	@Override
 	public void StopDiscovery() {
@@ -352,7 +352,7 @@ public class BLEProtocolImp extends AbstractAgileObject implements Protocol {
 	 *
 	 *
 	 * @throws DBusException
-	 * @see iot.agile.protocol.ble.Protocol#write()
+	 * @see org.eclipse.agail.protocol.ble.Protocol#write()
 	 */
 	@Override
 	public void Write(String deviceAddress, Map<String, String> profile, byte[] payload) throws DBusException {
@@ -389,7 +389,7 @@ public class BLEProtocolImp extends AbstractAgileObject implements Protocol {
 	 *
 	 *
 	 * @param profile
-	 * @see iot.agile.protocol.ble.Protocol#read()
+	 * @see org.eclipse.agail.protocol.ble.Protocol#read()
 	 */
 	public byte[] Read(String deviceAddress, Map<String, String> profile) throws DBusException {
 		BluetoothDevice device;
