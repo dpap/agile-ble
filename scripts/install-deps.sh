@@ -31,7 +31,7 @@ sh ./scripts/install-agile-interfaces.sh $DEPS
 sh ./scripts/install-tinyb.sh $DEPS
 
 # Enter into the project and compile 
-cd iot.agile.protocol.BLE
+cd org.eclipse.agail.protocol.BLE
 
 mvn clean install -U
 

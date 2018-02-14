@@ -47,7 +47,7 @@
   </root>
 
 
-  <logger name="iot.agile" level="DEBUG">
+  <logger name="org.eclipse.agail" level="DEBUG">
     <appender-ref ref="application_file" />     
   </logger>
 

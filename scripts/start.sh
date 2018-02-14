@@ -80,12 +80,12 @@ if [ $MODULE = 'all' ] || [ $MODULE = 'BLE' ]; then
   done
 
   # wait for ProtocolManager to initialize
-  while `! qdbus iot.agile.ProtocolManager > /dev/null`; do
+  while `! qdbus org.eclipse.agail.ProtocolManager > /dev/null`; do
     echo "waiting for ProtocolManager to initialize";
     sleep 1;
   done
 
-  java -cp deps/tinyb.jar:iot.agile.protocol.BLE/target/ble-1.0-jar-with-dependencies.jar -Djava.library.path=deps:deps/lib iot.agile.protocol.ble.BLEProtocolImp &
+  java -cp deps/tinyb.jar:org.eclipse.agail.protocol.BLE/target/ble-1.0-jar-with-dependencies.jar -Djava.library.path=deps:deps/lib org.eclipse.agail.protocol.ble.BLEProtocolImp &
   echo "Started AGILE BLE protocol"
 fi
 
