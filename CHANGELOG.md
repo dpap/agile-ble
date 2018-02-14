@@ -5,6 +5,11 @@
 # which accompanies this distribution, and is available at
 # https://www.eclipse.org/legal/epl-2.0/
 
+## v0.1.9 - 2018-02-14
+
+* Updating to EPL 2.0 [Csaba Kiraly]
+* Changing namespace to agail.eclipse.org [Csaba Kiraly]
+
 ## v0.1.8 - 2017-10-15
 
 * Use dbus-java 2.10 [Csaba Kiraly]
