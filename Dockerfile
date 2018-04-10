@@ -5,6 +5,8 @@
 # which accompanies this distribution, and is available at
 # https://www.eclipse.org/legal/epl-2.0/
 # 
+# SPDX-License-Identifier: EPL-2.0
+# 
 # Contributors:
 #     Create-Net / FBK - initial API and implementation
 #-------------------------------------------------------------------------------
@@ -43,9 +45,7 @@ ENV APATH /usr/src/app
 
 COPY scripts scripts
 
-RUN CC=clang CXX=clang++ CMAKE_C_COMPILER=clang CMAKE_CXX_COMPILER=clang++ \
-scripts/install-dbus-java.sh $APATH/deps
-
+COPY agile-dbus-java-interface agile-dbus-java-interface
 RUN CC=clang CXX=clang++ CMAKE_C_COMPILER=clang CMAKE_CXX_COMPILER=clang++ \
 scripts/install-agile-interfaces.sh $APATH/deps
 

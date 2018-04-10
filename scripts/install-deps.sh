@@ -6,6 +6,8 @@
 # which accompanies this distribution, and is available at
 # https://www.eclipse.org/legal/epl-2.0/
 # 
+# SPDX-License-Identifier: EPL-2.0
+# 
 # Contributors:
 #     Create-Net / FBK - initial API and implementation
 #-------------------------------------------------------------------------------
@@ -26,13 +28,7 @@ fi
 
 cd $CURRDIR
 
-sh ./scripts/install-dbus-java.sh $DEPS
 sh ./scripts/install-agile-interfaces.sh $DEPS
 sh ./scripts/install-tinyb.sh $DEPS
 
-# Enter into the project and compile 
-cd org.eclipse.agail.protocol.BLE
-
 mvn clean install -U
-
-cd ..
