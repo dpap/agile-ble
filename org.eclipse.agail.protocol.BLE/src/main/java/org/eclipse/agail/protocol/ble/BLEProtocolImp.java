@@ -104,7 +104,7 @@ public class BLEProtocolImp extends AbstractAgileObject implements Protocol {
 
 	public static final String AVAILABLE = "AVAILABLE";
 
-	public static final String UNAVAILABLE = "AVAILABLE";
+	public static final String UNAVAILABLE = "UNAVAILABLE";
 
 	private static final String GATT_SERVICE = "GATT_SERVICE";
 
@@ -670,7 +670,7 @@ public class BLEProtocolImp extends AbstractAgileObject implements Protocol {
 	private boolean isNewDevice(DeviceOverview device) {
 		for (DeviceOverview dev : deviceList) {
 			if (dev.getId().equals(device.getId())) {
-				return false;
+				return true;
 			}
 		}
 		return true;
