@@ -483,6 +483,7 @@ public class BLEProtocolImp extends AbstractAgileObject implements Protocol {
 										@Override
 										public void run(byte[] data) {
 											logger.info("data:" + byteArrayToHex(data) );
+                                            result[0] = data;
 											latch.countDown();
 										}
 									});
