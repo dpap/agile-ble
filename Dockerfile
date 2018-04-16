@@ -72,6 +72,9 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
     libxrender1 \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
+RUN apt-get update && apt-get remove binutils --no-install-recommends -y \
+&& apt-get clean && rm -rf /var/lib/apt/lists/*
+
 # isntall bluez
 RUN echo "deb http://deb.debian.org/debian unstable main" >>/etc/apt/sources.list \
     && apt-get update && apt-get install --no-install-recommends -y \
