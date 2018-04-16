@@ -115,6 +115,8 @@ public class BLEProtocolImp extends AbstractAgileObject implements Protocol {
 	 */
 	protected List<DeviceOverview> deviceList = new ArrayList<DeviceOverview>();
 
+    protected List<BluetoothDevice> listDiscovered = new ArrayList<BluetoothDevice>(); 
+
 	/**
 	 * The bluetooth manager
 	 */
@@ -310,7 +312,12 @@ public class BLEProtocolImp extends AbstractAgileObject implements Protocol {
 							device.getName(), AVAILABLE);
 					if (isNewDevice(deviceOverview)) {
 						logger.info("{}({}) Conn:{} RSSI:{}", device.getName(), device.getAddress(), device.getConnected(), device.getRSSI());
-						deviceList.add(deviceOverview);
+                            
+                        listDiscovered.add(device);
+                        NewNotificationRssi rssiCallback = new NewNotificationRssi(device,deviceOverview);
+                        device.enableRSSINotifications(rssiCallback);
+
+ 						deviceList.add(deviceOverview);
 						try {
 							ProtocolManager.FoundNewDeviceSignal foundNewDevSig = new ProtocolManager.FoundNewDeviceSignal(
 									AGILE_NEW_DEVICE_SIGNAL_PATH, deviceOverview);
@@ -643,6 +650,43 @@ public class BLEProtocolImp extends AbstractAgileObject implements Protocol {
 		return ret;
 	}
 	
+    protected class NewNotificationRssi implements BluetoothNotification<Short> {
+        BluetoothDevice device;
+        DeviceOverview deviceOverview;
+
+        public NewNotificationRssi (BluetoothDevice device, DeviceOverview deviceOverview){
+            logger.info("rssi callback" + device.getName());
+            this.device=device;
+            this.deviceOverview =deviceOverview;
+        }
+        @Override
+        public void run(Short rssi) {
+            logger.info(device.getName()+" new rssi:" + rssi.toString() );
+            try {
+			    ProtocolManager.FoundNewDeviceSignal foundNewDevSig = new ProtocolManager.FoundNewDeviceSignal(
+					AGILE_NEW_DEVICE_SIGNAL_PATH, deviceOverview);
+			    connection.sendSignal(foundNewDevSig);
+			} catch (DBusException e) {
+				e.printStackTrace();
+			}
+        }
+        public BluetoothDevice getDevice(){
+            return device;
+        }
+    }
+
+    public void disableRssiNotifications(BluetoothDevice device1){
+        if (device1 != null) {
+            device1.disableRSSINotifications();
+        } else {
+            if (listDiscovered != null && listDiscovered.size() > 0)            
+			    for (BluetoothDevice device : listDiscovered) {
+                    logger.info("Disable rssi "+device.getName());
+                    device.disableRSSINotifications();
+                }
+        }
+ 
+    }
 
 	// =========================UTILITY ==============
 
@@ -659,6 +703,7 @@ public class BLEProtocolImp extends AbstractAgileObject implements Protocol {
 	@Override
 	public void finalize() {
 		connection.disconnect();
+        disableRssiNotifications(null);
 	}
 
 	/**
@@ -670,7 +715,7 @@ public class BLEProtocolImp extends AbstractAgileObject implements Protocol {
 	private boolean isNewDevice(DeviceOverview device) {
 		for (DeviceOverview dev : deviceList) {
 			if (dev.getId().equals(device.getId())) {
-				return true;
+				return false;
 			}
 		}
 		return true;
