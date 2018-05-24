@@ -100,6 +100,8 @@ public class BLEProtocolImp extends AbstractAgileObject implements Protocol {
 	 */
 	protected List<DeviceOverview> deviceList = new ArrayList<DeviceOverview>();
 
+	protected List<BluetoothDevice> bleDevices = new ArrayList<BluetoothDevice>();
+
 	/**
 	 * The bluetooth manager
 	 */
@@ -133,8 +135,11 @@ public class BLEProtocolImp extends AbstractAgileObject implements Protocol {
 		logger.debug("Started BLE Protocol");
 
 		// fill initial list of devices
+//		List<BluetoothDevice> list = bleManager.getDevices();
+//		for (BluetoothDevice device : list) {
 		List<BluetoothDevice> list = bleManager.getDevices();
-		for (BluetoothDevice device : list) {
+		bleDevices = bleManager.getDevices();
+		for (BluetoothDevice device : bleDevices) {
 			logger.info("{}({}) Conn:{} RSSI:{}", device.getName(), device.getAddress(), device.getConnected(), device.getRSSI());
 			if (device.getConnected()) {
 				DeviceOverview deviceOverview = new DeviceOverview(device.getAddress(), AGILE_BLUETOOTH_BUS_NAME, device.getName(), CONNECTED);
@@ -574,6 +579,7 @@ public class BLEProtocolImp extends AbstractAgileObject implements Protocol {
 				Protocol.NewRecordSignal newRecordSignal = new Protocol.NewRecordSignal(AGILE_NEW_RECORD_SIGNAL_PATH,
 						lastRecord, address, profile);
 				logger.debug("Notifying {}", this);
+				logger.debug(record.toString());
 				connection.sendSignal(newRecordSignal);
 			} catch (DBusException e) {
 				e.printStackTrace();
@@ -635,5 +641,40 @@ public class BLEProtocolImp extends AbstractAgileObject implements Protocol {
 		}
 		return true;
 	}
+
+		// ======================= Listing the sensors ==============
+	@Override
+	public Map<String, List<String>> GetSensors(String deviceAddress) throws DBusException {
+		logger.debug("BLE Protocol =================== Get Sensors ======================== {}", deviceAddress);
+		if(deviceAddress.isEmpty()) {
+			return null;
+		}
+		
+		Map<String, List<String>> servicesMap = new HashMap<>();
+		BluetoothDevice bleDevice = null;
+		List<BluetoothGattService> services = null;
+		
+		while(servicesMap.size() == 0) {
+			if (servicesMap.size() > 0) {
+				break;
+			}
+			bleDevice = (BluetoothDevice) bleManager.find(BluetoothType.DEVICE, null, deviceAddress,null);
+			services = bleDevice.getServices();
+					
+			for (BluetoothGattService bluetoothGattService : services) {
+				
+				List<String> characteristics = new ArrayList<>();
+				for (BluetoothGattCharacteristic charac : bluetoothGattService.getCharacteristics()) {
+					characteristics.add(charac.getUUID());
+					logger.debug("Device {}, service: {} ================ GATTCharacteristic: {} ", bleDevice.getName(), bluetoothGattService.getUUID(), charac.getUUID());
+				}
+				logger.debug("Device {}, service: {}", bleDevice.getName(), characteristics.size());
+				servicesMap.put(bluetoothGattService.getUUID(), characteristics);
+			}
+		}
+		
+		return servicesMap;
+	}
+
 
 }

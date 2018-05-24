@@ -73,9 +73,9 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # isntall bluez
-RUN echo "deb http://deb.debian.org/debian unstable main" >>/etc/apt/sources.list \
+RUN echo "deb http://deb.debian.org/debian stable main" >>/etc/apt/sources.list \
     && apt-get update && apt-get install --no-install-recommends -y \
-    bluez/unstable \
+    bluez=5.43-2+deb9u1 \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # copy directories into WORKDIR
@@ -88,9 +88,9 @@ WORKDIR /usr/src/app
 ENV APATH /usr/src/app
 
 # install services
-RUN echo "deb http://deb.debian.org/debian unstable main" >>/etc/apt/sources.list \
+RUN echo "deb http://deb.debian.org/debian stable main" >>/etc/apt/sources.list \
     && apt-get update && apt-get install --no-install-recommends -y \
-    bluez/unstable \
+    bluez=5.43-2+deb9u1 \
     dbus \
     qdbus \
     libxrender1 \
@@ -104,5 +104,7 @@ COPY --from=0 $APATH/deps deps
 
 # workaround for external startup command. To be removed.
 RUN mkdir -p /usr/local/libexec/bluetooth/ && ln -s /usr/sbin/bluetoothd /usr/local/libexec/bluetooth/bluetoothd
+
+COPY org.eclipse.agail.protocol.BLE orgBLE
 
 CMD [ "bash", "/usr/src/app/scripts/start.sh" ]
