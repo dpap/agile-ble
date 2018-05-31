@@ -73,9 +73,9 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # isntall bluez
-RUN echo "deb http://deb.debian.org/debian unstable main" >>/etc/apt/sources.list \
+RUN echo "deb http://deb.debian.org/debian stable main" >>/etc/apt/sources.list \
     && apt-get update && apt-get install --no-install-recommends -y \
-    bluez/unstable \
+    bluez=5.43-2+deb9u1 \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # copy directories into WORKDIR
@@ -88,9 +88,9 @@ WORKDIR /usr/src/app
 ENV APATH /usr/src/app
 
 # install services
-RUN echo "deb http://deb.debian.org/debian unstable main" >>/etc/apt/sources.list \
+RUN echo "deb http://deb.debian.org/debian stable main" >>/etc/apt/sources.list \
     && apt-get update && apt-get install --no-install-recommends -y \
-    bluez/unstable \
+    bluez=5.43-2+deb9u1 \
     dbus \
     qdbus \
     libxrender1 \
