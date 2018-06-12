@@ -105,4 +105,6 @@ COPY --from=0 $APATH/deps deps
 # workaround for external startup command. To be removed.
 RUN mkdir -p /usr/local/libexec/bluetooth/ && ln -s /usr/sbin/bluetoothd /usr/local/libexec/bluetooth/bluetoothd
 
+COPY org.eclipse.agail.protocol.BLE orgBLE
+
 CMD [ "bash", "/usr/src/app/scripts/start.sh" ]
